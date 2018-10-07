@@ -1,7 +1,7 @@
 <template>
   <div class="mt-2 ml-2 mr-2 mb-0">
     <li class="list-group-item" :class="senderMessageBgColor"><slot></slot></li>
-    <small class="badge float-right" :class="senderBadgeColor">You</small>
+    <small class="badge float-right" :class="senderBadgeColor">{{ user }}</small>
   </div>
 </template>
 
@@ -9,7 +9,8 @@
     export default {
         props: [
           'color',
-          'badgecolor'
+          'badgecolor',
+          'user'
         ],
         computed: {
           senderMessageBgColor() {

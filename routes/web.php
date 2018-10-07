@@ -15,6 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/chatroom', function () {
-    return view('chat');
-});
+Route::get('/chatroom', [
+  'as' => 'say.chatroom.index',
+  'uses' => 'MessagesController@chatroom'
+]);
+
+Route::post('/send', [
+  'as' => 'say.chatroom.send',
+  'uses' => 'MessagesController@sendMessage'
+]);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

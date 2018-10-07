@@ -16,10 +16,11 @@
                 <li class="list-group-item active">Chat with User1234</li>
                 <ul class="list-group list-group-messages" v-chat-scroll>
                   <message
-                    v-for="value in chat.messages"
+                    v-for="value,index in chat.messages"
                     :key=value.index
-                    color='warning'
-                    badgecolor='secondary'>
+                    :color=chat.colors[index]
+                    :badgecolor=chat.badgeColors[index]
+                    :user=chat.users[index]>
                     @{{ value }}
                   </message>
                 </ul>

@@ -25,15 +25,40 @@ const app = new Vue({
     data: {
       message: '',
       chat: {
-        messages: []
+        messages: [],
+        users: [],
+        colors: [],
+        badgeColors: []
       }
     },
     methods: {
       send(){
         if (this.message.length != 0) {
           this.chat.messages.push(this.message);
-          this.message = '';
+          this.chat.users.push('You');
+          this.chat.colors.push('success');
+          this.chat.badgeColors.push('success');
+          axios.post('/send', {
+            message: this.message
+          })
+          .then(response => {
+            console.log(response);
+            this.message = '';
+          })
+          .catch(error => {
+            console.log(error);
+          });
         }
       }
+    },
+    mounted() {
+      Echo.private('say')
+        .listen('MessageSentEvent', (e) => {
+console.log(e);
+            this.chat.messages.push(e.message);
+            this.chat.users.push(e.user);
+            this.chat.colors.push('warning');
+            this.chat.badgeColors.push('warning');
+        });
     }
 });
