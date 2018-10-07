@@ -11,16 +11,23 @@
     <div class="container chatroom-container">
       <div class="row justify-content-center align-items-center">
         <div class="col-sm-7 col-md-7 col-lg-5">
-          <div class="chat-window border border-secondary d-flex flex-column justify-content-between" id="app">
-            <ul class="list-group">
-              <li class="list-group-item active">Cras justo odio</li>
-              <li class="list-group-item">Dapibus ac facilisis in</li>
-              <li class="list-group-item">Morbi leo risus</li>
-              <li class="list-group-item">Porta ac consectetur ac</li>
-              <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-            <div class="input-group message-box">
-                <input type="text" class="form-control py-4" placeholder="Write new message">
+          <div class="" id="app">
+            <div class="chat-window">
+                <li class="list-group-item active">Chat with User1234</li>
+                <ul class="list-group list-group-messages" v-chat-scroll>
+                  <message
+                    v-for="value in chat.messages"
+                    :key=value.index
+                    color='warning'
+                    badgecolor='secondary'>
+                    @{{ value }}
+                  </message>
+                </ul>
+                <div class="input-group message-box">
+                    <input type="text" class="form-control py-4" placeholder="Type new message..."
+                    v-model='message'
+                    @keyup.enter="send">
+                </div>
             </div>
           </div>
         </div>

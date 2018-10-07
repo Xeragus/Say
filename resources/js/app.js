@@ -8,6 +8,9 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vue from 'vue'
+import VueChatScroll from 'vue-chat-scroll'
+Vue.use(VueChatScroll)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -15,8 +18,22 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
+Vue.component('message', require('./components/Message.vue'));
+// ()
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+      message: '',
+      chat: {
+        messages: []
+      }
+    },
+    methods: {
+      send(){
+        if (this.message.length != 0) {
+          this.chat.messages.push(this.message);
+          this.message = '';
+        }
+      }
+    }
 });

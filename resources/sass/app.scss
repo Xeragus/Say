@@ -14,11 +14,15 @@
 }
 
 .chat-window {
-  height: 600px;
   border-radius: 0.5rem;
   background: $chatroom-bg;
 }
 
 html, body, .chatroom-container, .chatroom-container .row {
   height: 100%;
+}
+
+.list-group-messages {
+  overflow-y: scroll;
+  height: 500px;
 }
