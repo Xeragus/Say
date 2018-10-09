@@ -9,7 +9,15 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 import Vue from 'vue'
+
+// auto-scrolling package
 import VueChatScroll from 'vue-chat-scroll'
+
+// notification package
+import Toaster from 'v-toaster'
+import 'v-toaster/dist/v-toaster.css'
+Vue.use(Toaster, {timeout: 5000})
+
 Vue.use(VueChatScroll)
 
 /**
@@ -28,16 +36,28 @@ const app = new Vue({
         messages: [],
         users: [],
         colors: [],
-        badgeColors: []
+        badgeColors: [],
+        messagesTimes: []
+      },
+      typing: '',
+      numberOfPresentUsers: 0
+    },
+    watch: {
+      message() {
+        Echo.private('say')
+          .whisper('typing', {
+              name: this.message
+          });
       }
     },
     methods: {
-      send(){
+      send() {
         if (this.message.length != 0) {
           this.chat.messages.push(this.message);
           this.chat.users.push('You');
           this.chat.colors.push('success');
           this.chat.badgeColors.push('success');
+          this.chat.messagesTimes.push(this.getTime());
           axios.post('/send', {
             message: this.message
           })
@@ -49,16 +69,43 @@ const app = new Vue({
             console.log(error);
           });
         }
+      },
+      getTime() {
+        let date = new Date();
+        return date.getHours() + ':' + date.getMinutes();
       }
     },
     mounted() {
       Echo.private('say')
         .listen('MessageSentEvent', (e) => {
-console.log(e);
+            console.log(e);
             this.chat.messages.push(e.message);
             this.chat.users.push(e.user);
             this.chat.colors.push('warning');
             this.chat.badgeColors.push('warning');
+            this.chat.messagesTimes.push(this.getTime());
+        })
+        .listenForWhisper('typing', (e) => {
+            console.log(e);
+            this.typing = "";
+            if (e.name != '') {
+              this.typing = "typing..."
+            }
+        });
+      Echo.join(`say`)
+        .here((users) => {
+            this.numberOfPresentUsers = users.length;
+            // console.log(users);
+        })
+        .joining((user) => {
+            this.$toaster.success(user.name + ' joined the chat');
+            this.numberOfPresentUsers++;
+            // console.log("joins: " + user.name);
+        })
+        .leaving((user) => {
+            this.$toaster.error(user.name + ' left the chat');
+            this.numberOfPresentUsers--;
+            // console.log("leaves: " + user.name);
         });
     }
 });

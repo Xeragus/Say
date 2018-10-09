@@ -13,17 +13,19 @@
         <div class="col-sm-7 col-md-7 col-lg-5">
           <div class="" id="app">
             <div class="chat-window">
-                <li class="list-group-item active">Chat with User1234</li>
+                <li class="list-group-item active">Chatroom | @{{ numberOfPresentUsers }} people here</li>
                 <ul class="list-group list-group-messages" v-chat-scroll>
                   <message
                     v-for="value,index in chat.messages"
                     :key=value.index
                     :color=chat.colors[index]
                     :badgecolor=chat.badgeColors[index]
-                    :user=chat.users[index]>
+                    :user=chat.users[index]
+                    :time=chat.messagesTimes[index]>
                     @{{ value }}
                   </message>
                 </ul>
+                <div class="badge badge-pill badge-primary">@{{ typing }}</div><br>
                 <div class="input-group message-box">
                     <input type="text" class="form-control py-4" placeholder="Type new message..."
                     v-model='message'
